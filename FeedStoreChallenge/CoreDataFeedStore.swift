@@ -84,6 +84,11 @@ public final class CoreDataFeedStore: FeedStore {
 
 private extension ManagedFeedImage {
 	var localFeedImage: LocalFeedImage {
-		LocalFeedImage(id: self.id, description: self.descriptionString, location: self.location, url: self.url)
+		LocalFeedImage(
+			id: id,
+			description: descriptionString,
+			location: location,
+			url: url
+		)
 	}
 }
