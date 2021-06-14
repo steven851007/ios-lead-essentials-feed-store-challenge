@@ -76,6 +76,7 @@ public final class CoreDataFeedStore: FeedStore {
 				}
 				completion(nil)
 			} catch {
+				cacheStore.rollback()
 				completion(error)
 			}
 		}
