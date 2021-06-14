@@ -20,7 +20,8 @@ public class ManagedCache: NSManagedObject {
 	@NSManaged private var feedImagesOrderedSet: NSOrderedSet?
 
 	public var feedImages: [ManagedFeedImage] {
-		feedImagesOrderedSet?.array as? [ManagedFeedImage] ?? []
+		get { feedImagesOrderedSet?.array as? [ManagedFeedImage] ?? [] }
+		set { feedImagesOrderedSet = NSOrderedSet(array: newValue) }
 	}
 }
 
