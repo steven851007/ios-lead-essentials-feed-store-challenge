@@ -57,6 +57,7 @@ public final class CoreDataFeedStore: FeedStore {
 				let managedFeedImages = feed.map { feedImageStore.feedImage(from: $0) }
 				cache.timestamp = timestamp
 				cache.feedImages = managedFeedImages
+				try cacheStore.save()
 				completion(nil)
 			} catch {
 				completion(error)

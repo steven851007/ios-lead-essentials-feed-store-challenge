@@ -34,6 +34,12 @@ class ManagedCacheStore {
 	func existingCacheOrNewOne() throws -> ManagedCache {
 		return try cache() ?? newObject()
 	}
+
+	func save() throws {
+		if context.hasChanges {
+			try context.save()
+		}
+	}
 }
 
 @objc(ManagedCache)
