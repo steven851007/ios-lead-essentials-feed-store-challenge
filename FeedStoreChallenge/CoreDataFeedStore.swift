@@ -32,12 +32,16 @@ public final class CoreDataFeedStore: FeedStore {
 		let context = context
 		context.perform {
 			let fetchRequest: NSFetchRequest<ManagedCache> = ManagedCache.fetchRequest()
-			let objects = try? context.fetch(fetchRequest)
-			if let cache = objects?.first {
-				let localFeedImages = cache.feedImages.map { $0.localFeedImage }
-				completion(.found(feed: localFeedImages, timestamp: cache.timestamp))
-			} else {
-				completion(.empty)
+			do {
+				let objects = try context.fetch(fetchRequest)
+				if let cache = objects.first {
+					let localFeedImages = cache.feedImages.map { $0.localFeedImage }
+					completion(.found(feed: localFeedImages, timestamp: cache.timestamp))
+				} else {
+					completion(.empty)
+				}
+			} catch {
+				completion(.failure(error))
 			}
 		}
 	}
