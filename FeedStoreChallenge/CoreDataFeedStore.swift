@@ -29,14 +29,48 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		completion(.empty)
+		let context = context
+		context.perform {
+			let fetchRequest: NSFetchRequest<ManagedCache> = ManagedCache.fetchRequest()
+			let objects = try? context.fetch(fetchRequest)
+			if let cache = objects?.first {
+				let localFeedImages = cache.feedImages.map { $0.localFeedImage }
+				completion(.found(feed: localFeedImages, timestamp: cache.timestamp!))
+			} else {
+				completion(.empty)
+			}
+		}
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		fatalError("Must be implemented")
+		let context = context
+		context.perform {
+			let managedFeedImages = Self.createManagedFeedImage(from: feed, insertInto: context)
+			let cache = ManagedCache(entity: ManagedCache.entity(), insertInto: context)
+			cache.timestamp = timestamp
+			cache.insertIntoFeedImagesOrderedSet(managedFeedImages, at: NSIndexSet(indexesIn: NSRange(location: 0, length: feed.count)))
+			completion(nil)
+		}
 	}
 
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		fatalError("Must be implemented")
+	}
+
+	private static func createManagedFeedImage(from feed: [LocalFeedImage], insertInto context: NSManagedObjectContext) -> [ManagedFeedImage] {
+		return feed.map {
+			let managedFeedImage = ManagedFeedImage(context: context)
+			managedFeedImage.id = $0.id
+			managedFeedImage.descriptionString = $0.description
+			managedFeedImage.location = $0.location
+			managedFeedImage.url = $0.url
+			return managedFeedImage
+		}
+	}
+}
+
+private extension ManagedFeedImage {
+	var localFeedImage: LocalFeedImage {
+		LocalFeedImage(id: self.id!, description: self.descriptionString, location: self.location, url: self.url!)
 	}
 }

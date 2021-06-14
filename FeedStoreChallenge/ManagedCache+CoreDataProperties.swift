@@ -17,40 +17,43 @@ public class ManagedCache: NSManagedObject {
 	}
 
 	@NSManaged public var timestamp: Date?
-	@NSManaged public var feedImages: NSOrderedSet?
+	@NSManaged private var feedImagesOrderedSet: NSOrderedSet?
+
+	public var feedImages: [ManagedFeedImage] {
+		feedImagesOrderedSet?.array as? [ManagedFeedImage] ?? []
+	}
 }
 
-// MARK: Generated accessors for feedImages
 extension ManagedCache {
-	@objc(insertObject:inFeedImagesAtIndex:)
-	@NSManaged public func insertIntoFeedImages(_ value: ManagedFeedImage, at idx: Int)
+	@objc(insertObject:inFeedImagesOrderedSetAtIndex:)
+	@NSManaged public func insertIntoFeedImagesOrderedSet(_ value: ManagedFeedImage, at idx: Int)
 
-	@objc(removeObjectFromFeedImagesAtIndex:)
-	@NSManaged public func removeFromFeedImages(at idx: Int)
+	@objc(removeObjectFromFeedImagesOrderedSetAtIndex:)
+	@NSManaged public func removeFromFeedImagesOrderedSet(at idx: Int)
 
-	@objc(insertFeedImages:atIndexes:)
-	@NSManaged public func insertIntoFeedImages(_ values: [ManagedFeedImage], at indexes: NSIndexSet)
+	@objc(insertFeedImagesOrderedSet:atIndexes:)
+	@NSManaged public func insertIntoFeedImagesOrderedSet(_ values: [ManagedFeedImage], at indexes: NSIndexSet)
 
-	@objc(removeFeedImagesAtIndexes:)
-	@NSManaged public func removeFromFeedImages(at indexes: NSIndexSet)
+	@objc(removeFeedImagesOrderedSetAtIndexes:)
+	@NSManaged public func removeFromFeedImagesOrderedSet(at indexes: NSIndexSet)
 
-	@objc(replaceObjectInFeedImagesAtIndex:withObject:)
-	@NSManaged public func replaceFeedImages(at idx: Int, with value: ManagedFeedImage)
+	@objc(replaceObjectInFeedImagesOrderedSetAtIndex:withObject:)
+	@NSManaged public func replaceFeedImagesOrderedSet(at idx: Int, with value: ManagedFeedImage)
 
-	@objc(replaceFeedImagesAtIndexes:withFeedImages:)
-	@NSManaged public func replaceFeedImages(at indexes: NSIndexSet, with values: [ManagedFeedImage])
+	@objc(replaceFeedImagesOrderedSetAtIndexes:withFeedImagesOrderedSet:)
+	@NSManaged public func replaceFeedImagesOrderedSet(at indexes: NSIndexSet, with values: [ManagedFeedImage])
 
-	@objc(addFeedImagesObject:)
-	@NSManaged public func addToFeedImages(_ value: ManagedFeedImage)
+	@objc(addFeedImagesOrderedSetObject:)
+	@NSManaged public func addToFeedImagesOrderedSet(_ value: ManagedFeedImage)
 
-	@objc(removeFeedImagesObject:)
-	@NSManaged public func removeFromFeedImages(_ value: ManagedFeedImage)
+	@objc(removeFeedImagesOrderedSetObject:)
+	@NSManaged public func removeFromFeedImagesOrderedSet(_ value: ManagedFeedImage)
 
-	@objc(addFeedImages:)
-	@NSManaged public func addToFeedImages(_ values: NSOrderedSet)
+	@objc(addFeedImagesOrderedSet:)
+	@NSManaged public func addToFeedImagesOrderedSet(_ values: NSOrderedSet)
 
-	@objc(removeFeedImages:)
-	@NSManaged public func removeFromFeedImages(_ values: NSOrderedSet)
+	@objc(removeFeedImagesOrderedSet:)
+	@NSManaged public func removeFromFeedImagesOrderedSet(_ values: NSOrderedSet)
 }
 
 extension ManagedCache: Identifiable {}
