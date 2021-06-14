@@ -20,6 +20,7 @@ public class ManagedFeedImage: NSManagedObject {
 	@NSManaged public var descriptionString: String?
 	@NSManaged public var location: String?
 	@NSManaged public var url: URL
+	@NSManaged public var cache: ManagedCache?
 }
 
 extension ManagedFeedImage: Identifiable {}
