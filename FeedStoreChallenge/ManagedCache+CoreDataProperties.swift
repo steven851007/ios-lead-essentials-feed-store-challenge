@@ -21,6 +21,10 @@ class ManagedCacheStore {
 		ManagedCache(entity: ManagedCache.entity(), insertInto: context)
 	}
 
+	func delete(_ object: ManagedCache) {
+		context.delete(object)
+	}
+
 	func fetchRequest() -> NSFetchRequest<ManagedCache> {
 		ManagedCache.fetchRequest()
 	}
