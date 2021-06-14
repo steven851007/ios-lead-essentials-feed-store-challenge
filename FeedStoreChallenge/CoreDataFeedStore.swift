@@ -60,6 +60,7 @@ public final class CoreDataFeedStore: FeedStore {
 				try cacheStore.save()
 				completion(nil)
 			} catch {
+				cacheStore.rollback()
 				completion(error)
 			}
 		}

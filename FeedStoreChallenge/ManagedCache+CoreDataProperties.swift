@@ -40,6 +40,10 @@ class ManagedCacheStore {
 			try context.save()
 		}
 	}
+
+	func rollback() {
+		context.rollback()
+	}
 }
 
 @objc(ManagedCache)
