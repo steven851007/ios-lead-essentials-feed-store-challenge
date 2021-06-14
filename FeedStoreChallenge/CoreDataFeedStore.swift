@@ -76,7 +76,7 @@ public final class CoreDataFeedStore: FeedStore {
 				}
 				completion(nil)
 			} catch {
-				
+				completion(error)
 			}
 		}
 	}
