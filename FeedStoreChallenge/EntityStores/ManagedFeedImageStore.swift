@@ -16,10 +16,6 @@ class ManagedFeedImageStore {
 		self.context = context
 	}
 
-	func newObject() -> ManagedFeedImage {
-		ManagedFeedImage(entity: ManagedFeedImage.entity(), insertInto: context)
-	}
-
 	func feedImage(from feed: LocalFeedImage) -> ManagedFeedImage {
 		let managedFeedImage = newObject()
 		managedFeedImage.id = feed.id
@@ -29,7 +25,7 @@ class ManagedFeedImageStore {
 		return managedFeedImage
 	}
 
-	func fetchRequest() -> NSFetchRequest<ManagedFeedImage> {
-		ManagedFeedImage.fetchRequest()
+	private func newObject() -> ManagedFeedImage {
+		ManagedFeedImage(entity: ManagedFeedImage.entity(), insertInto: context)
 	}
 }

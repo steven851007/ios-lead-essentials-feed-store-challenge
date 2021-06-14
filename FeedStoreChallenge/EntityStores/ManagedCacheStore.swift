@@ -16,18 +16,6 @@ class ManagedCacheStore {
 		self.context = context
 	}
 
-	private func newObject() -> ManagedCache {
-		ManagedCache(entity: ManagedCache.entity(), insertInto: context)
-	}
-
-	func delete(_ object: ManagedCache) {
-		context.delete(object)
-	}
-
-	func fetchRequest() -> NSFetchRequest<ManagedCache> {
-		ManagedCache.fetchRequest()
-	}
-
 	func cache() throws -> ManagedCache? {
 		let fetchRequest = fetchRequest()
 		let result = try context.fetch(fetchRequest)
@@ -44,7 +32,21 @@ class ManagedCacheStore {
 		}
 	}
 
+	func delete(_ object: ManagedCache) {
+		context.delete(object)
+	}
+
 	func rollback() {
 		context.rollback()
+	}
+}
+
+private extension ManagedCacheStore {
+	func fetchRequest() -> NSFetchRequest<ManagedCache> {
+		ManagedCache.fetchRequest()
+	}
+
+	func newObject() -> ManagedCache {
+		ManagedCache(entity: ManagedCache.entity(), insertInto: context)
 	}
 }
