@@ -11,6 +11,7 @@ public final class CoreDataFeedStore: FeedStore {
 	private let container: NSPersistentContainer
 	private let context: NSManagedObjectContext
 	private let cacheStore: ManagedCacheStore
+	private let feedImageStore: ManagedFeedImageStore
 
 	struct ModelNotFound: Error {
 		let modelName: String
@@ -28,6 +29,7 @@ public final class CoreDataFeedStore: FeedStore {
 		)
 		context = container.newBackgroundContext()
 		cacheStore = ManagedCacheStore(context: context)
+		feedImageStore = ManagedFeedImageStore(context: context)
 	}
 
 	public func retrieve(completion: @escaping RetrievalCompletion) {
@@ -49,12 +51,12 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let context = context
 		let cacheStore = cacheStore
+		let feedImageStore = feedImageStore
 		context.perform {
 			do {
 				let cache = try cacheStore.existingCacheOrNewOne()
-				let managedFeedImages = Self.createManagedFeedImage(from: feed, insertInto: context)
+				let managedFeedImages = feed.map { feedImageStore.feedImage(from: $0) }
 				cache.timestamp = timestamp
 				cache.feedImages = managedFeedImages
 				completion(nil)
@@ -66,17 +68,6 @@ public final class CoreDataFeedStore: FeedStore {
 
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		fatalError("Must be implemented")
-	}
-
-	private static func createManagedFeedImage(from feed: [LocalFeedImage], insertInto context: NSManagedObjectContext) -> [ManagedFeedImage] {
-		feed.map {
-			let managedFeedImage = ManagedFeedImage(context: context)
-			managedFeedImage.id = $0.id
-			managedFeedImage.descriptionString = $0.description
-			managedFeedImage.location = $0.location
-			managedFeedImage.url = $0.url
-			return managedFeedImage
-		}
 	}
 }
 
