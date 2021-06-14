@@ -10,6 +10,18 @@
 import Foundation
 import CoreData
 
+class ManagedCacheStore {
+	private let context: NSManagedObjectContext
+
+	init(context: NSManagedObjectContext) {
+		self.context = context
+	}
+
+	func newObject() -> ManagedCache {
+		ManagedCache(entity: ManagedCache.entity(), insertInto: context)
+	}
+}
+
 @objc(ManagedCache)
 public class ManagedCache: NSManagedObject {
 	@nonobjc public class func fetchRequest() -> NSFetchRequest<ManagedCache> {

@@ -10,6 +10,7 @@ public final class CoreDataFeedStore: FeedStore {
 
 	private let container: NSPersistentContainer
 	private let context: NSManagedObjectContext
+	private let cacheStore: ManagedCacheStore
 
 	struct ModelNotFound: Error {
 		let modelName: String
@@ -26,6 +27,7 @@ public final class CoreDataFeedStore: FeedStore {
 			url: storeURL
 		)
 		context = container.newBackgroundContext()
+		cacheStore = ManagedCacheStore(context: context)
 	}
 
 	public func retrieve(completion: @escaping RetrievalCompletion) {
@@ -48,6 +50,7 @@ public final class CoreDataFeedStore: FeedStore {
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		let context = context
+		let cacheStore = cacheStore
 		context.perform {
 			let fetchRequest: NSFetchRequest<ManagedCache> = ManagedCache.fetchRequest()
 			let cache: ManagedCache
@@ -55,7 +58,7 @@ public final class CoreDataFeedStore: FeedStore {
 				cache = fetchedCache
 				cache.feedImages = []
 			} else {
-				cache = ManagedCache(entity: ManagedCache.entity(), insertInto: context)
+				cache = cacheStore.newObject()
 			}
 			let managedFeedImages = Self.createManagedFeedImage(from: feed, insertInto: context)
 			cache.timestamp = timestamp
