@@ -52,18 +52,15 @@ public final class CoreDataFeedStore: FeedStore {
 		let context = context
 		let cacheStore = cacheStore
 		context.perform {
-			let fetchRequest: NSFetchRequest<ManagedCache> = ManagedCache.fetchRequest()
-			let cache: ManagedCache
-			if let fetchedCache = try? context.fetch(fetchRequest).first {
-				cache = fetchedCache
-				cache.feedImages = []
-			} else {
-				cache = cacheStore.newObject()
+			do {
+				let cache = try cacheStore.existingCacheOrNewOne()
+				let managedFeedImages = Self.createManagedFeedImage(from: feed, insertInto: context)
+				cache.timestamp = timestamp
+				cache.feedImages = managedFeedImages
+				completion(nil)
+			} catch {
+				completion(error)
 			}
-			let managedFeedImages = Self.createManagedFeedImage(from: feed, insertInto: context)
-			cache.timestamp = timestamp
-			cache.insertIntoFeedImagesOrderedSet(managedFeedImages, at: NSIndexSet(indexesIn: NSRange(location: 0, length: feed.count)))
-			completion(nil)
 		}
 	}
 

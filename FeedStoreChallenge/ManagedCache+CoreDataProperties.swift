@@ -17,8 +17,22 @@ class ManagedCacheStore {
 		self.context = context
 	}
 
-	func newObject() -> ManagedCache {
+	private func newObject() -> ManagedCache {
 		ManagedCache(entity: ManagedCache.entity(), insertInto: context)
+	}
+
+	func fetchRequest() -> NSFetchRequest<ManagedCache> {
+		ManagedCache.fetchRequest()
+	}
+
+	func cache() throws -> ManagedCache? {
+		let fetchRequest = fetchRequest()
+		let result = try context.fetch(fetchRequest)
+		return result.first
+	}
+
+	func existingCacheOrNewOne() throws -> ManagedCache {
+		return try cache() ?? newObject()
 	}
 }
 
