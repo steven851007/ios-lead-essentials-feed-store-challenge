@@ -17,10 +17,10 @@ public class ManagedCache: NSManagedObject {
 	}
 
 	@NSManaged public var timestamp: Date
-	@NSManaged private var feedImagesOrderedSet: NSOrderedSet?
+	@NSManaged private var feedImagesOrderedSet: NSOrderedSet
 
 	public var feedImages: [ManagedFeedImage] {
-		get { feedImagesOrderedSet?.array as? [ManagedFeedImage] ?? [] }
+		get { feedImagesOrderedSet.array as? [ManagedFeedImage] ?? [] }
 		set { feedImagesOrderedSet = NSOrderedSet(array: newValue) }
 	}
 }
