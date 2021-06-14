@@ -16,10 +16,10 @@ public class ManagedFeedImage: NSManagedObject {
 		return NSFetchRequest<ManagedFeedImage>(entityName: "ManagedFeedImage")
 	}
 
-	@NSManaged public var id: UUID?
+	@NSManaged public var id: UUID
 	@NSManaged public var descriptionString: String?
 	@NSManaged public var location: String?
-	@NSManaged public var url: URL?
+	@NSManaged public var url: URL
 	@NSManaged public var cache: ManagedCache?
 }
 

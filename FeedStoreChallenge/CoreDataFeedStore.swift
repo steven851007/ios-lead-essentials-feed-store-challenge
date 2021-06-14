@@ -35,7 +35,7 @@ public final class CoreDataFeedStore: FeedStore {
 			let objects = try? context.fetch(fetchRequest)
 			if let cache = objects?.first {
 				let localFeedImages = cache.feedImages.map { $0.localFeedImage }
-				completion(.found(feed: localFeedImages, timestamp: cache.timestamp!))
+				completion(.found(feed: localFeedImages, timestamp: cache.timestamp))
 			} else {
 				completion(.empty)
 			}
@@ -58,7 +58,7 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	private static func createManagedFeedImage(from feed: [LocalFeedImage], insertInto context: NSManagedObjectContext) -> [ManagedFeedImage] {
-		return feed.map {
+		feed.map {
 			let managedFeedImage = ManagedFeedImage(context: context)
 			managedFeedImage.id = $0.id
 			managedFeedImage.descriptionString = $0.description
@@ -71,6 +71,6 @@ public final class CoreDataFeedStore: FeedStore {
 
 private extension ManagedFeedImage {
 	var localFeedImage: LocalFeedImage {
-		LocalFeedImage(id: self.id!, description: self.descriptionString, location: self.location, url: self.url!)
+		LocalFeedImage(id: self.id, description: self.descriptionString, location: self.location, url: self.url)
 	}
 }

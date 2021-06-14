@@ -16,7 +16,7 @@ public class ManagedCache: NSManagedObject {
 		return NSFetchRequest<ManagedCache>(entityName: "ManagedCache")
 	}
 
-	@NSManaged public var timestamp: Date?
+	@NSManaged public var timestamp: Date
 	@NSManaged private var feedImagesOrderedSet: NSOrderedSet?
 
 	public var feedImages: [ManagedFeedImage] {
