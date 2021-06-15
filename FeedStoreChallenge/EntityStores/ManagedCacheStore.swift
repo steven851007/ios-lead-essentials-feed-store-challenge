@@ -17,8 +17,8 @@ class ManagedCacheStore {
 	}
 
 	func cache() throws -> ManagedCache? {
-		let fetchRequest = fetchRequest()
-		let result = try context.fetch(fetchRequest)
+		let newFetchRequest = fetchRequest()
+		let result = try context.fetch(newFetchRequest)
 		return result.first
 	}
 
