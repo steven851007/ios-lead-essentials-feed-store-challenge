@@ -33,8 +33,7 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		let cacheStore = cacheStore
-		context.perform {
+		context.perform { [cacheStore] in
 			do {
 				if let cache = try cacheStore.cache() {
 					let localFeedImages = cache.feedImages.map { $0.localFeedImage }
@@ -49,9 +48,7 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let cacheStore = cacheStore
-		let feedImageStore = feedImageStore
-		context.perform {
+		context.perform { [cacheStore, feedImageStore] in
 			do {
 				let cache = try cacheStore.existingCacheOrNewOne()
 				cache.feedImages = feed.map { feedImageStore.feedImage(from: $0) }
@@ -66,8 +63,7 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-		let cacheStore = cacheStore
-		context.perform {
+		context.perform { [cacheStore] in
 			do {
 				if let cache = try cacheStore.cache() {
 					cacheStore.delete(cache)
